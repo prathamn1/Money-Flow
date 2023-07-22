@@ -3,16 +3,15 @@ const ExpenseSchema = require('../models/expenseModel')
 
 
 exports.addExpense = async (req,res) => {
-    const {title, amount, date, description, category,type} = req.body;
+    const {title, amount, date, description, category} = req.body;
     const expenseTransaction = ExpenseSchema ( {
         title,
         amount,
         date,
-        type,
         description,
         category
     });
-    
+    // console.log(req.body);
     try {
         if(!title || !category || !date || !description || !amount) {
             return res.status(400).json({message : 'All fields are required'})
@@ -45,14 +44,24 @@ exports.getAllExpenses = async (req,res) => {
     }
 }
 
-exports.deleteExpense = async (req,res) => {
-    const { transactId } =req.params;   // here transactId parameter must be same as defined in route request
-    // console.log(req);
-    // console.log(transactId);
-    ExpenseSchema.findByIdAndDelete(transactId)
-        .then(()=> {
-            return res.status(200).json({message : "Expense Deleted Successfully"});
-        }).catch((err) => {
-            return res.status(500).json({message : "Server Error! Please Try Again"});
-        }) 
-}
+// exports.deleteExpense = async (req,res) => {
+//     const { transactId } =req.params;   // here transactId parameter must be same as defined in route request
+//     // console.log(req);
+//     // console.log(transactId);
+//     ExpenseSchema.findByIdAndDelete(transactId)
+//         .then(()=> {
+//             return res.status(200).json({message : "Expense Deleted Successfully"});
+//         }).catch((err) => {
+//             return res.status(500).json({message : "Server Error! Please Try Again"});
+//         }) 
+// }
+
+exports.deleteExpense = async (req, res) => {
+    try {
+      const { transactId } = req.params;
+      await ExpenseSchema.findByIdAndDelete(transactId);
+      return res.status(200).json({ message: "Expense Deleted Successfully" });
+    } catch (err) {
+      return res.status(500).json({ message: "Server Error! Please Try Again" });
+    }
+  };

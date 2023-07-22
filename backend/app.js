@@ -1,7 +1,7 @@
 const express= require('express')
 const cors = require('cors')
 const db =require('./database/db')
-// const {readdirSync} = require('fs')
+const {readdirSync} = require('fs')
 
 
 const app = express();
@@ -16,9 +16,9 @@ app.use(express.json())  // for parsing incoming requests with JSON data
 app.use(cors())
 
 
-//routes
+// routes
 
-// readdirSync('./routes').map((route) => app.use('/api/v1',require('./routes/' + route)))
+readdirSync('./routes').map((route) => app.use('/api/v1',require('./routes/' + route)))
 
 
 
