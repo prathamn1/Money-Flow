@@ -13,10 +13,10 @@ exports.addIncome = async (req,res) => {
     });
     
     try {
-        if(!title || !category || !date || !description || !amount) {
+        if(!title || !category || !date || !amount) {
             return res.status(400).json({message : 'All fields are required'})
         }
-        if(amount<=0 || !(typeof amount==='number')) {
+        if(amount<=0) {
             return res.status(400).json({message : 'Amount must be a positive value '})
         }
 

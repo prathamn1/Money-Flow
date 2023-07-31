@@ -9,7 +9,7 @@ const Navigation = ({active,setActive}) => {   // here props contain useState an
     <NavStyled>
 
         <div className="user-container">
-            <img src={avatar} alt="" srcset="" />
+            <img src={avatar} alt="" srcSet="" />
             <div className="text">
                 <h2>Mike</h2>
                 <p>Your Money</p>
@@ -40,7 +40,7 @@ const Navigation = ({active,setActive}) => {   // here props contain useState an
 
 const NavStyled = styled.div`
   padding: 2rem 1.5rem;
-  width : 374px;
+  max-width : 374px;
   height : 100%;
   background : rgba(252,246,249,0.78);
   border : 3px solid #FFFFFF;
