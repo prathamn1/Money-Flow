@@ -3,7 +3,10 @@
 
 
 /frontend/node_modules
-/frontend/src/components/Expenses
+
+
+
+.gitignore
 /frontend/src/components/Dashboard
 /frontend/src/components/Chart
 /frontend/src/components/Form
