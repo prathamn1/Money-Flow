@@ -14,6 +14,11 @@ function Dashboard() {
         getExpenses()
     })
 
+    let minIncome = Math.min(...incomes.map(item => item.amount));
+    let maxIncome = Math.max(...incomes.map(item => item.amount));
+    let minExpense = Math.min(...expenses.map(item => item.amount));
+    let maxExpense = Math.max(...expenses.map(item => item.amount));
+
     return (
         <DashboardStyled>
             <InnerLayout>
@@ -51,19 +56,19 @@ function Dashboard() {
                           <h2 className="salary-title">Min <span>Income</span>Max</h2>
                           <div className="salary-item">
                               <p>
-                                  ${Math.min(...incomes.map(item => item.amount))}
+                                    {ruppee}{isFinite(minIncome) ? minIncome : 0}
                               </p>
                               <p>
-                                  ${Math.max(...incomes.map(item => item.amount))}
+                                    {ruppee}{isFinite(maxIncome) ? maxIncome : 0}
                               </p>
                           </div>
                           <h2 className="salary-title">Min <span>Expense</span>Max</h2>
                           <div className="salary-item">
                               <p>
-                                  ${Math.min(...expenses.map(item => item.amount))}
+                                    {ruppee}{isFinite(minExpense) ? minExpense : 0}
                               </p>
                               <p>
-                                  ${Math.max(...expenses.map(item => item.amount))}
+                                    {ruppee}{isFinite(maxExpense) ? maxExpense : 0}
                               </p>
                           </div>
                         </div>
