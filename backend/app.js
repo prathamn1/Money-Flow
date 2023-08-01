@@ -2,6 +2,7 @@ const express= require('express')
 const cors = require('cors')
 const db =require('./database/db')
 const {readdirSync} = require('fs')
+const path = require('path')
 
 
 const app = express();
@@ -30,5 +31,10 @@ const server = () => {
         console.log('listening to port', PORT);
     })
 }
+
+app.use(express.static(path.join(__dirname,'../frontend/build')))
+app.get('*' , (req,res) => {
+    res.sendFile(path.join(__dirname,'../frontend/build/index.html'))
+})
 
 server();
