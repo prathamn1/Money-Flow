@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react"
 import axios from 'axios'
 
 
-const BASE_URL = "https://money-flow-8tg7.onrender.com/api/v1/";
+const BASE_URL = process.URL;
 
 
 const GlobalContext = React.createContext()
