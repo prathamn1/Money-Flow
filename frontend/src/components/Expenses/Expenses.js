@@ -4,6 +4,7 @@ import { useGlobalContext } from '../../context/GlobalContext';
 import { InnerLayout } from '../../styles/Layouts';
 import TransactionItem from '../TransactionItem/TransactionItem';
 import ExpenseForm from '../Form/ExpenseForm';
+import { ruppee } from '../../utils/Icons';
 
 function Expenses() {
     const {expenses, getExpenses, deleteExpense, totalExpenses} = useGlobalContext()
@@ -15,7 +16,7 @@ function Expenses() {
         <ExpenseStyled>
             <InnerLayout>
                 <h1>Expenses</h1>
-                <h2 className="total-expense">Total Expense: <span>${totalExpenses()}</span></h2>
+                <h2 className="total-expense">Total Expense: <span>{ruppee} {totalExpenses()}</span></h2>
                 <div className="expense-content">
                     <div className="form-container">
                         <ExpenseForm />
@@ -56,10 +57,10 @@ const ExpenseStyled = styled.div`
         border-radius: 20px;
         padding: 1rem;
         margin: 1rem 0;
-        font-size: 2rem;
+        /* font-size: 2rem; */
         gap: .5rem;
         span{
-            font-size: 2.5rem;
+            font-size: 1 rem;
             font-weight: 800;
             color: var(--color-green);
         }

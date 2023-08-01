@@ -19,7 +19,8 @@ const App = () => {
   },[])
   
 
-  const global = useGlobalContext();
+  // const global = useGlobalContext();
+  useGlobalContext();
   // console.log(global);
 
 

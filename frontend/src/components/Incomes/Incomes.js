@@ -57,10 +57,10 @@ const IncomeStyled = styled.div`
         border-radius: 20px;
         padding: 1rem;
         margin: 1rem 0;
-        font-size: 2rem;
+        /* font-size: 2rem; */
         gap: .5rem;
         span{
-            font-size: 2.5rem;
+            font-size: 1 rem;
             font-weight: 800;
             color: var(--color-green);
             
