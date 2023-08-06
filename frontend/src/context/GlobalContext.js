@@ -2,8 +2,8 @@ import React, { useContext, useState } from "react"
 import axios from 'axios'
 
 
-const BASE_URL = "https://money-flow-9gf2.onrender.com/api/v1/";
-
+// const BASE_URL = "https://money-flow-9gf2.onrender.com/api/v1/";
+const BASE_URL = "http://localhost:5000/api/v1/";
 
 const GlobalContext = React.createContext()
 
@@ -92,6 +92,53 @@ export const GlobalProvider = ({children}) => {
     }
 
 
+
+    ////////////////////////////////////////////////////////////
+
+
+    const LoginUser = async (user) => {
+        try {
+          const response = await axios.post(`${BASE_URL}login`, user);
+          return response.data;
+        } catch (error) {
+          return error.response.data;
+        }
+      };
+      
+    const RegisterUser = async (user) => {
+          try {
+            const response = await axios.post(`${BASE_URL}register`, user);
+            return response.data;
+          } catch (error) {
+            return error.response.data;
+          }
+        };
+        
+      
+    const GetCurrentUser = async () => {
+          try {
+            const response = await axios.get("/api/users/get-current-user");
+            return response.data;
+          } catch (error) {
+            return error.response.data;
+          }
+        };
+
+    
+
+
+
+
+    const [isLoading, setIsLoading] = useState(false);
+
+    const showLoader = () => setIsLoading(true);
+    const hideLoader = () => setIsLoading(false);
+
+    ////////////////////////////////////////////////////////////
+
+
+
+
     return (
         <GlobalContext.Provider value={{
             addIncome,
@@ -107,7 +154,15 @@ export const GlobalProvider = ({children}) => {
             totalBalance,
             transactionHistory,
             error,
-            setError
+            setError,
+
+            GetCurrentUser,
+            LoginUser,
+            RegisterUser,
+            isLoading,
+            showLoader,
+            hideLoader
+
         }}>
             {children}
         </GlobalContext.Provider>

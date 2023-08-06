@@ -1,10 +1,10 @@
-const ExpenseSchema = require('../models/expenseModel')
+const expenseSchema = require('../models/expenseModel')
 
 
 
 exports.addExpense = async (req,res) => {
     const {title, amount, date, description, category} = req.body;
-    const expenseTransaction = ExpenseSchema ( {
+    const expenseTransaction = expenseSchema ( {
         title,
         amount,
         date,
@@ -36,7 +36,7 @@ exports.addExpense = async (req,res) => {
 exports.getAllExpenses = async (req,res) => {
 
     try {
-        const allExpenses = await ExpenseSchema.find().sort({createdAt : -1})
+        const allExpenses = await expenseSchema.find().sort({createdAt : -1})
         res.status(200).json(allExpenses);
 
     } catch (error) {
@@ -48,7 +48,7 @@ exports.getAllExpenses = async (req,res) => {
 //     const { transactId } =req.params;   // here transactId parameter must be same as defined in route request
 //     // console.log(req);
 //     // console.log(transactId);
-//     ExpenseSchema.findByIdAndDelete(transactId)
+//     expenseSchema.findByIdAndDelete(transactId)
 //         .then(()=> {
 //             return res.status(200).json({message : "Expense Deleted Successfully"});
 //         }).catch((err) => {
@@ -59,7 +59,7 @@ exports.getAllExpenses = async (req,res) => {
 exports.deleteExpense = async (req, res) => {
     try {
       const { transactId } = req.params;
-      await ExpenseSchema.findByIdAndDelete(transactId);
+      await expenseSchema.findByIdAndDelete(transactId);
       return res.status(200).json({ message: "Expense Deleted Successfully" });
     } catch (err) {
       return res.status(500).json({ message: "Server Error! Please Try Again" });

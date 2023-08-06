@@ -1,10 +1,10 @@
-const IncomeSchema = require('../models/incomeModel')
+const incomeSchema = require('../models/incomeModel')
 
 
 
 exports.addIncome = async (req,res) => {
     const {title, amount, date, description, category,type} = req.body;
-    const incomeTransaction = IncomeSchema ( {
+    const incomeTransaction = incomeSchema ( {
         title,
         amount,
         date,
@@ -36,7 +36,7 @@ exports.addIncome = async (req,res) => {
 exports.getAllIncomes = async (req,res) => {
     
     try {
-        const allIncomes = await IncomeSchema.find().sort({createdAt : -1})
+        const allIncomes = await incomeSchema.find().sort({createdAt : -1})
         res.status(200).json(allIncomes);
 
     } catch (error) {
@@ -48,7 +48,7 @@ exports.deleteIncome = async (req,res) => {
     const { transactId } =req.params;   // here transactId parameter must be same as defined in route request
     // console.log(req);
     // console.log(transactId);
-    IncomeSchema.findByIdAndDelete(transactId)
+    incomeSchema.findByIdAndDelete(transactId)
         .then(()=> {
             return res.status(200).json({message : "income Deleted"});
         }).catch((err) => {

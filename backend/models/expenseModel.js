@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 
-const ExpenseSchema = new mongoose.Schema( {
+const expenseSchema = new mongoose.Schema( {
     title : {
         type : String,
         required: true,
@@ -39,4 +39,4 @@ const ExpenseSchema = new mongoose.Schema( {
 
 },{timestamps : true})
 
-module.exports = mongoose.model('Expense', ExpenseSchema)   // here Expense is the name of collection inside database
+module.exports = mongoose.model('Expense', expenseSchema)   // here Expense is the name of collection inside database
