@@ -3,7 +3,7 @@ export const transactions = <i className="fa-solid fa-credit-card"></i>
 export const categories = <i className="fa-solid fa-tags"></i>
 export const accounts = <i className="fa-solid fa-wallet"></i>
 export const settings = <i className="fa-solid fa-cog"></i>
-export const ruppee = <i class="fa-solid fa-indian-rupee-sign fa-sm"></i>
+export const ruppee = <i className="fa-solid fa-indian-rupee-sign fa-sm"></i>
 export const logout = <i className="fa-solid fa-sign-out"></i>
 export const trend = <i className="fa-solid fa-money-bill-trend-up"></i>
 export const expenses = <i className="fa-solid fa-money-bill-transfer"></i>

@@ -36,9 +36,10 @@ function Login(){
   };
 
   useEffect(() => {
+    console.log("inside login")
     if(localStorage.getItem("token"))
     navigate("/")
-  })
+  },[])
   
   return (
     <div className=" h-screen bg-primary flex items-center justify-center">

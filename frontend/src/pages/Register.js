@@ -31,7 +31,7 @@ function Register(){
         }
       } 
       catch (error) {
-      
+        
         toast.error(error.message);
       }
       finally {
@@ -39,9 +39,10 @@ function Register(){
       }
     };
     useEffect(() => {
+      console.log("inside register")
       if(localStorage.getItem("token"))
         navigate("/")
-    })
+    },[])
   return (
     <div className=" h-screen bg-primary flex items-center justify-center">
       

@@ -103,7 +103,7 @@ export const GlobalProvider = ({children}) => {
         } catch (error) {
           return error.response.data;
         }
-      };
+    }
       
     const RegisterUser = async (user) => {
           try {
@@ -112,17 +112,21 @@ export const GlobalProvider = ({children}) => {
           } catch (error) {
             return error.response.data;
           }
-        };
+    }
         
       
     const GetCurrentUser = async () => {
-          try {
-            const response = await axios.get("/api/users/get-current-user");
+        const token = localStorage.getItem('token')
+        try {
+            const response = await axios.get(`${BASE_URL}get-current-user`,{headers: {
+                Authorization: `Bearer ${token}`,
+              },});
             return response.data;
-          } catch (error) {
+        } catch (error) {
+            console.log("catch GetCurrentUser()")
             return error.response.data;
-          }
-        };
+        }
+    }
 
     
 

@@ -11,7 +11,7 @@ function Expenses() {
 
     useEffect(() =>{
         getExpenses()
-    }) // removed dependency array ,[]
+    },[]) // removed dependency array ,[]
     return (
         <ExpenseStyled>
             <InnerLayout>

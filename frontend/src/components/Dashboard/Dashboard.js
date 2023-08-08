@@ -12,7 +12,7 @@ function Dashboard() {
     useEffect(() => {
         getIncomes()
         getExpenses()
-    })
+    },[])
 
     let minIncome = Math.min(...incomes.map(item => item.amount));
     let maxIncome = Math.max(...incomes.map(item => item.amount));
