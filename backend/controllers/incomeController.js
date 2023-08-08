@@ -3,8 +3,9 @@ const incomeSchema = require('../models/incomeModel')
 
 
 exports.addIncome = async (req,res) => {
-    const {title, amount, date, description, category,type} = req.body;
+    const {userId,title, amount, date, description, category,type} = req.body;
     const incomeTransaction = incomeSchema ( {
+        userId,
         title,
         amount,
         date,
@@ -13,10 +14,13 @@ exports.addIncome = async (req,res) => {
     });
     
     try {
-        if(!title || !category || !date || !amount) {
+        if(!userId) {
+            return res.status(400).json("message : UserId not Present or Invalid")
+        }
+        else if(!title || !category || !date || !amount) {
             return res.status(400).json({message : 'All fields are required'})
         }
-        if(amount<=0) {
+        else if(amount<=0) {
             return res.status(400).json({message : 'Amount must be a positive value '})
         }
 
@@ -34,9 +38,9 @@ exports.addIncome = async (req,res) => {
 
 
 exports.getAllIncomes = async (req,res) => {
-    
     try {
-        const allIncomes = await incomeSchema.find().sort({createdAt : -1})
+        const {userId} = req.params
+        const allIncomes = await incomeSchema.find({userId:userId}).sort({createdAt : -1})
         res.status(200).json(allIncomes);
 
     } catch (error) {
@@ -51,7 +55,7 @@ exports.deleteIncome = async (req,res) => {
     incomeSchema.findByIdAndDelete(transactId)
         .then(()=> {
             return res.status(200).json({message : "income Deleted"});
-        }).catch((err) => {
+        }).catch((error) => {
             return res.status(500).json({message : "Server Error! Please Try Again"});
         }) 
 }

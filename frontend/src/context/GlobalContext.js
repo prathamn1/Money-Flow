@@ -9,6 +9,7 @@ const GlobalContext = React.createContext()
 
 export const GlobalProvider = ({children}) => {
 
+    const [loggedInUser,setLoggedInUser] = useState({})
     const [incomes, setIncomes] = useState([])
     const [expenses, setExpenses] = useState([])
     const [error, setError] = useState(null)
@@ -16,6 +17,7 @@ export const GlobalProvider = ({children}) => {
     //calculate incomes
     const addIncome = async (income) => {
         // const response = await axios.post(`${BASE_URL}add-income`, income)
+        income.userId = loggedInUser; 
         await axios.post(`${BASE_URL}add-income`, income)
             .catch((err) =>{
                 setError(err.response.data.message)
@@ -24,9 +26,10 @@ export const GlobalProvider = ({children}) => {
     }
 
     const getIncomes = async () => {
-
-        const response = await axios.get(`${BASE_URL}get-all-incomes`)
+        
+        const response = await axios.get(`${BASE_URL}get-all-incomes/${loggedInUser._id}`)
         setIncomes(response.data)
+        console.log(incomes)
         // console.log(response.data)
     }
 
@@ -47,9 +50,9 @@ export const GlobalProvider = ({children}) => {
 
 
     //calculate incomes
-    const addExpense = async (income) => {
-        // const response = await axios.post(`${BASE_URL}add-expense`, income)
-        await axios.post(`${BASE_URL}add-expense`, income)
+    const addExpense = async (expense) => {
+        expense.userId = loggedInUser;
+        await axios.post(`${BASE_URL}add-expense`, expense)
             .catch((err) =>{
                 setError(err.response.data.message)
             })
@@ -57,7 +60,7 @@ export const GlobalProvider = ({children}) => {
     }
 
     const getExpenses = async () => {
-        const response = await axios.get(`${BASE_URL}get-all-expenses`)
+        const response = await axios.get(`${BASE_URL}get-all-expenses/${loggedInUser._id}`)
         setExpenses(response.data)
         // console.log(response.data)
     }
@@ -96,7 +99,7 @@ export const GlobalProvider = ({children}) => {
     ////////////////////////////////////////////////////////////
 
 
-    const LoginUser = async (user) => {
+    const loginUser = async (user) => {
         try {
           const response = await axios.post(`${BASE_URL}login`, user);
           return response.data;
@@ -105,9 +108,10 @@ export const GlobalProvider = ({children}) => {
         }
     }
       
-    const RegisterUser = async (user) => {
+    const registerUser = async (user) => {
           try {
             const response = await axios.post(`${BASE_URL}register`, user);
+            
             return response.data;
           } catch (error) {
             return error.response.data;
@@ -115,22 +119,28 @@ export const GlobalProvider = ({children}) => {
     }
         
       
-    const GetCurrentUser = async () => {
+    const getCurrentUser = async () => {
         const token = localStorage.getItem('token')
         try {
             const response = await axios.get(`${BASE_URL}get-current-user`,{headers: {
                 Authorization: `Bearer ${token}`,
               },});
+            // console.log(response.data)
             return response.data;
         } catch (error) {
             console.log("catch GetCurrentUser()")
             return error.response.data;
+            
         }
     }
 
     
 
-
+    const logOutUser =  () => {
+        localStorage.removeItem('token');
+        setLoggedInUser({});
+        window.location.href='/login'
+    }
 
 
     const [isLoading, setIsLoading] = useState(false);
@@ -160,12 +170,15 @@ export const GlobalProvider = ({children}) => {
             error,
             setError,
 
-            GetCurrentUser,
-            LoginUser,
-            RegisterUser,
+            getCurrentUser,
+            loginUser,
+            registerUser,
+            logOutUser,
             isLoading,
             showLoader,
-            hideLoader
+            hideLoader,
+            loggedInUser,
+            setLoggedInUser
 
         }}>
             {children}

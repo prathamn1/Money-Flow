@@ -14,10 +14,10 @@ const {
 
 router
   .post("/add-income", addIncome)
-  .get("/get-all-incomes", getAllIncomes)
+  .get("/get-all-incomes/:userId", getAllIncomes)
   .delete("/delete-income/:transactId", deleteIncome)
   .post("/add-expense", addExpense)
-  .get("/get-all-expenses", getAllExpenses)
+  .get("/get-all-expenses/:userId", getAllExpenses)
   .delete("/delete-expense/:transactId", deleteExpense);
 
 module.exports = router;

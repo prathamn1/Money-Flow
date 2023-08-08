@@ -12,6 +12,7 @@ function Income() {
     useEffect(() =>{
         getIncomes()
     },[])       // removed dependency array
+
     return (
         <IncomeStyled>
             <InnerLayout>

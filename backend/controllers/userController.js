@@ -82,7 +82,7 @@ const currentUserController = async ( req,res) => {
           data: user,
         });
       } catch (error) {
-        console.log("catch currentUserController")
+        // console.log("catch currentUserController")
         res.send({
           message: error.message,
           success: false,

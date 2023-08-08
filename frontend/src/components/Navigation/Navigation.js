@@ -1,18 +1,23 @@
 import React from 'react'
 import { styled } from 'styled-components'
 import { MenuItems } from '../../utils/MenuItems'
+import { useGlobalContext } from '../../context/GlobalContext'
 import { signout } from '../../utils/Icons'
 import avatar from '../../assets/avatar.png'
 
 const Navigation = ({active,setActive}) => {   // here props contain useState and active for active links on sidebar
+
+    const {loggedInUser,logOutUser} = useGlobalContext();
+
+
+
   return (
     <NavStyled>
 
         <div className="user-container">
             <img src={avatar} alt="" srcSet="" />
             <div className="text">
-                <h2>Mike</h2>
-                <p>Your Money</p>
+                <h2>{loggedInUser.name}</h2>
             </div>
         </div>
         <ul className="menu-items">
@@ -30,7 +35,7 @@ const Navigation = ({active,setActive}) => {   // here props contain useState an
             }
         </ul>
         <div className="bottom-nav">
-            <li>{signout} Sign Out</li>
+            <li onClick={logOutUser}>{signout} Sign Out</li>
         </div>
 
     </NavStyled>
@@ -114,7 +119,9 @@ const NavStyled = styled.div`
             border-radius: 0 10px 10px 0;
         }
     }
-
+    .bottom-nav {
+        cursor : pointer;
+    }
 
 `;
 

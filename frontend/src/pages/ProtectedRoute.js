@@ -12,19 +12,20 @@ import { useGlobalContext } from '../context/GlobalContext'
 import {toast} from "react-hot-toast"
 
 const ProtectedRoute = ({ children }) => {
-  const {showLoader,hideLoader,GetCurrentUser} = useGlobalContext();
+  const {showLoader,hideLoader,loggedInUser,getCurrentUser,setLoggedInUser} = useGlobalContext();
   const navigate = useNavigate();
-
   useEffect(() => {
     const getUser = async () => {
       try {
         showLoader();
-        const response = await GetCurrentUser();
-
+        const response = await getCurrentUser();
+        
         hideLoader();
         if (response.success) {
-            // console.log(response.data);
-            // Dispatch user data if needed
+            console.log(response.data)
+            setLoggedInUser(response.data)
+            console.log(loggedInUser)
+
         } else {
           toast.error(response.message);
           navigate("/login");
@@ -34,11 +35,13 @@ const ProtectedRoute = ({ children }) => {
         toast.error(error.message);
         navigate("/login");
       }
+      
     };
 
     if (localStorage.getItem("token")) {
       getUser();
     } else {
+      console.log("line 42")
       navigate("/login");
     }
   }, []);
@@ -51,6 +54,7 @@ const ProtectedRoute = ({ children }) => {
   
 
   const displayData = () => {
+
     switch(active) {
       case 1:
         return <Dashboard/>
@@ -67,6 +71,7 @@ const ProtectedRoute = ({ children }) => {
 
 
 
+
   return (
     <AppStyled  bg={bg} className='App'>
 
@@ -74,7 +79,7 @@ const ProtectedRoute = ({ children }) => {
 
       <MainLayout>
 
-        <Navigation active={active} setActive={setActive} />
+        <Navigation  active={active} setActive={setActive} />
 
         <main>
           {displayData()}

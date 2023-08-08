@@ -7,12 +7,37 @@ import { ruppee } from '../../utils/Icons';
 import Chart from '../Chart/Chart';
 
 function Dashboard() {
-    const {totalExpenses,incomes, expenses, totalIncome, totalBalance, getIncomes, getExpenses } = useGlobalContext()
+    const {totalExpenses,incomes,getCurrentUser, expenses, totalIncome, totalBalance, getIncomes, getExpenses } = useGlobalContext()
+
+    // useEffect(() => {
+    //     getIncomes()
+    //     getExpenses()
+    // },[])
+
 
     useEffect(() => {
-        getIncomes()
-        getExpenses()
-    },[])
+        const fetchData = async () => {
+          try {
+            // First, get the current user's data
+            const userResponse = await getCurrentUser();
+    
+            if (userResponse.success) {
+              // If user data is retrieved successfully, proceed to get incomes and expenses
+              console.log(userResponse.data)
+              
+              await getIncomes(userResponse.data._id);
+              await getExpenses(userResponse.data._id);
+            } else {
+              // Handle user authentication error
+              console.error('User authentication error:', userResponse.message);
+            }
+          } catch (error) {
+            console.error('Error:', error.message);
+          }
+        };
+    
+        fetchData();
+      }, []);
 
     let minIncome = Math.min(...incomes.map(item => item.amount));
     let maxIncome = Math.max(...incomes.map(item => item.amount));

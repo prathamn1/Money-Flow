@@ -12,13 +12,13 @@ function Login(){
     })
 
 
-    const {LoginUser,showLoader,hideLoader}  = useGlobalContext()
+    const {loginUser,showLoader,hideLoader}  = useGlobalContext()
 
     const login=async ()=>{
       showLoader()
       try {
         
-        const response = await LoginUser(user);
+        const response = await loginUser(user);
         if (response.success) {
           toast.success(response.message);
           localStorage.setItem("token",response.data);
@@ -36,7 +36,7 @@ function Login(){
   };
 
   useEffect(() => {
-    console.log("inside login")
+    // console.log("inside login")
     if(localStorage.getItem("token"))
     navigate("/")
   },[])

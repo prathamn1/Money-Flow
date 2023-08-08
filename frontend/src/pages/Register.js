@@ -16,12 +16,12 @@ function Register(){
     })
 
 
-    const {RegisterUser,showLoader,hideLoader} =useGlobalContext();          
+    const {registerUser,showLoader,hideLoader} =useGlobalContext();          
 
     const register = async () => {
       showLoader();
       try {
-        const response = await RegisterUser(user);
+        const response = await registerUser(user);
 
         if (response.success) {
           toast.success(response.message);
@@ -39,7 +39,7 @@ function Register(){
       }
     };
     useEffect(() => {
-      console.log("inside register")
+      // console.log("inside register")
       if(localStorage.getItem("token"))
         navigate("/")
     },[])
