@@ -12,16 +12,16 @@ export const WindowSize = () => {
       }
     };
 
-    window.addEventListener('resize', updateSize);
+    window.addEventListener("resize", updateSize);
 
     return () => {
       isMounted = false;
-      window.removeEventListener('resize', updateSize);
+      window.removeEventListener("resize", updateSize);
     };
   }, []);
 
   return {
     width: size[0],
-    height: size[1]
+    height: size[1],
   };
 };

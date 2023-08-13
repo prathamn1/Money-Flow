@@ -1,0 +1,74 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+input {
+  height: 40px;
+  padding-left: 20px;
+}
+
+/* Homepage Container */
+.homepage-container {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: whitesmoke;
+  padding: 1rem;
+  color: blue;
+}
+
+.logo img {
+  height: 40px;
+  margin-right: 10px;
+}
+
+.nav-buttons button {
+  border: none;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+/* Static Content */
+.static-content {
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Cards */
+.card-container {
+  display: flex;
+  justify-content: space-around;
+  padding: 2rem;
+}
+
+.card {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.card-icon {
+  font-size: 2rem;
+  color: #007bff;
+}
+
+/* Footer */
+.footer {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 1rem;
+}
+
+::-ms-reveal {
+  filter: invert(100%);
+}

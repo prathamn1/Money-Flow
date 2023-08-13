@@ -1,4 +1,4 @@
-import {createGlobalStyle} from 'styled-components'
+import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
     *{
@@ -16,6 +16,13 @@ export const GlobalStyle = createGlobalStyle`
         --color-grey: #aaa;
         --color-accent: #F56692;
         --color-delete: #FF0000;
+        --color-purple : #4E4FEB;
+        --color-blue : #068fff;
+        --color-white : #F0F0F0;
+        --color-black : #000000;
+        --color-light-black : #252b48;
+        --color-yellow : #F9D949;
+      
     }
 
     body{
@@ -23,10 +30,15 @@ export const GlobalStyle = createGlobalStyle`
         font-size : clamp(0.8rem,1.3vw,1rem);
         overflow: hidden;
         color: rgba(34, 34, 96, .6);
+        background-color: var(--color-light-black);
     }
 
     h1, h2, h3, h4, h5, h6{
         color: var(--primary-color);
+    }
+
+    html,body,#root {
+        height : 100%;
     }
 
     .error{
