@@ -90,7 +90,7 @@ function Register() {
           onChange={(e) => setUser({ ...user, name: e.target.value })}
           placeholder="Enter Your Full Name"
         />
-        {error && <p className="error">{error}</p>}
+        {error.length!==0 && <p className="error">{error}</p>}
         <h1 className="text-xl text-primary ">Email</h1>
         <input
           className=""
@@ -98,7 +98,7 @@ function Register() {
           required
           value={user.email}
           onChange={ (e) => {
-            setError(null);
+            setError("");
             setUser({ ...user, email: e.target.value })}
           }
           placeholder="Enter Your Email-id"
@@ -116,7 +116,7 @@ function Register() {
           ref={buttonRef}
           type="button"
           className={
-            user.email && user.password
+            user.email && user.password && !error && user.name
               ? "contained-button "
               : "disabled-button"
           }

@@ -81,14 +81,14 @@ function Login() {
           </h1>
         </div>
         <h1 className="text-xl text-primary ">Email</h1>
-        {error && <p className="error">{error}</p>}
+        {error.length!==0 && <p className="error">{error}</p>}
         <input
           className=""
           type="email"
           required
           value={user.email}
           onChange={(e) => {
-            setError(null);
+            setError("");
             setUser({ ...user, email: e.target.value });
           }}
           placeholder="Enter Your Email-id"
@@ -106,13 +106,13 @@ function Login() {
           ref={buttonRef}
           type="button"
           className={
-            user.email && user.password
+            user.email && user.password && !error
               ? "contained-button "
               : "disabled-button"
           }
           onKeyDown={(e)=>console.log(e)}
           onClick={login}
-          disabled={user.email === "" || user.password === "" ? true : false}
+          disabled={user.email === "" || user.password === "" || error.length !== 0 ? true : false}
         >
           Proceed
         </button>
