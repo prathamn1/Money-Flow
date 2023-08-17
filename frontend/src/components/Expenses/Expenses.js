@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import styled from "styled-components";
+import {styled} from "styled-components";
 import { useGlobalContext } from "../../context/GlobalContext";
 import Form from "../Form/ExpenseForm";
 import TransactionItem from "../TransactionItem/TransactionItem";
@@ -14,22 +14,27 @@ function Expense() {
     hideLoader,
     getExpenses,
     deleteExpense,
-    totalExpenses,
+    totalExpense,
   } = useGlobalContext();
 
   useEffect(() => {
+
+    if(loggedInUser._id!==undefined) return;
+
     showLoader();
     try {
+      // console.log(loggedInUser._id);
       if (loggedInUser._id === undefined) {
         throw new Error("Connection Error");
       }
       getExpenses(loggedInUser._id);
     } catch {
-      toast.error("Connection Error! Couldn't fetch Expenses");
+      console.log("Connection Error! Couldn't fetch expenses");
+      toast.error("Connection Error! Couldn't fetch expenses");
     } finally {
       hideLoader();
     }
-  });
+  },[]);
 
   return (
     <ExpenseStyled>
@@ -38,7 +43,7 @@ function Expense() {
         <h2 className="total-expense">
           Total Expense :{" "}
           <span>
-            {ruppee} {totalExpenses()}
+            {ruppee} {totalExpense()}
           </span>
         </h2>
       </div>
@@ -78,25 +83,28 @@ const ExpenseStyled = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  gap: 3vh;
+  gap: 5vh;
   .heading {
     display: flex;
-    font-size: 5vh;
+    font-size: 4vh;
     align-items: center;
     justify-content: space-around;
     h1 {
       color: var(--color-white);
     }
     .total-expense {
-      width: max-content;
+      width: 25vw;
+      min-width: fit-content;
+      height: 10vh;
+      min-height: fit-content;
       opacity: 0.8;
-      font-size: 20px;
+      font-size: clamp(2vh, 2.5vh, 3vh);
       display: flex;
       justify-content: center;
       align-items: center;
       background: #000000;
       border: 1px solid var(--color-blue);
-      padding: 1.5rem;
+      padding: 1rem;
       border-top-width: 5px;
       gap: 0.5rem;
       color: var(--color-yellow);
@@ -106,14 +114,16 @@ const ExpenseStyled = styled.div`
       }
     }
     .total-expense:hover {
-      font-size: 23px;
+      font-size: clamp(1.2vw, 1.5vw, 2vw);
       opacity: 1;
+      font-weight: 700;
     }
   }
 
   .expense-content {
     display: grid;
     max-height: 100%;
+    grid-template-columns: 40% 55%;
     grid-template-areas:
       "frm trs"
       "frm trs";
@@ -124,14 +134,17 @@ const ExpenseStyled = styled.div`
     }
 
     .expenses {
-      max-height: 70vh;
-      overflow-y: scroll;
-      grid-area: trs;
-      scroll-behavior: smooth;
+      /* border : 1px solid var(--color-blue); */
       display: flex;
       flex-direction: column;
+      max-height: 70vh;
+      overflow-y: scroll;
+      overflow-x : hidden;
+      grid-area: trs;
+      scroll-behavior: smooth;
       gap: 0.7rem;
     }
+
     .expenses::-webkit-scrollbar {
       width: 1rem;
     }
@@ -140,10 +153,11 @@ const ExpenseStyled = styled.div`
       border: 1px solid var(--color-blue);
     }
     .expenses::-webkit-scrollbar-thumb {
-      background-color: var(--color-yellow);
+      background-color: var(--color-purple);
       width: 55px;
     }
   }
 `;
+
 
 export default Expense;

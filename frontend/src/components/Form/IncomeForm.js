@@ -1,15 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import "react-datepicker/dist/react-datepicker.css";
 import { useGlobalContext } from "../../context/GlobalContext";
 import Button from "../Button/Button";
 import { plus } from "../../utils/Icons";
+import  DatePicker  from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-
-function Form() {
+const Form = () => {
   const { addIncome, error, setError } = useGlobalContext();
   const [inputState, setInputState] = useState({
     title: "",
@@ -23,7 +20,7 @@ function Form() {
 
   const handleInput = (name) => (e) => {
     setInputState({ ...inputState, [name]: e.target.value });
-    setError("");
+    // setError("");
   };
 
   const handleSubmit = (e) => {
@@ -38,55 +35,65 @@ function Form() {
     });
   };
 
+
   return (
     <FormStyled onSubmit={handleSubmit}>
-      {error && <p className="error">{error}</p>}
+      {/* {error && <p className="error">{error}</p>} */}
       <div className="input-control">
         <input
+          maxLength={15}
           type="text"
           value={title}
           name={"title"}
-          placeholder="Enter Income Title"
+          placeholder="Enter Income Title&#10; [Max 15 Characters]"
           onChange={handleInput("title")}
         />
       </div>
       <div className="input-control">
         <input
+          maxLength={10}
           value={amount}
-          type="text"
+          type="number"
           name={"amount"}
           placeholder={"Enter Income Amount"}
           onChange={handleInput("amount")}
         />
       </div>
       <div className="input-control date-cnt">
-        <LocalizationProvider dateAdapter={AdapterMoment}>
-          <DatePicker
-            id="date"
-            selected={date}
-            onChange={(date) => {
-              setInputState({ ...inputState, date: date });
-            }}
-            format="DD-MM-YYYY"
-            formatDensity="spacious"
-          />
-        </LocalizationProvider>
+        <DatePicker
+          showIcon
+          id="date"
+          placeholderText="Enter A Date"
+          selected={date}
+          dateFormat="dd/MM/yyyy"
+          onChange={(date) => {
+            setInputState({ ...inputState, date: date });
+          }}
+          isClearable ={date==="" ? false : true}
+        />
       </div>
 
       <div className="selects input-control">
         <select
+          title="Select Income Category"
           required
           value={category}
           name="category"
           id="category"
           onChange={handleInput("category")}
+          style={
+            {
+              color : category==="" ? "whitesmoke" : "var(--color-yellow)",
+              opacity : category==="" ? 0.8 : 1
+            }
+          }
         >
           <option value="" disabled>
             Income Category
           </option>
           <option value="salary">Salary</option>
           <option value="freelancing">Freelancing</option>
-          <option value="investments">Investiments</option>
+          <option value="investments">Investments</option>
           <option value="stocks">Stocks</option>
           <option value="bitcoin">Bitcoin</option>
           <option value="bank">Bank Transfer</option>
@@ -98,10 +105,11 @@ function Form() {
         <textarea
           name="description"
           value={description}
-          placeholder="Add A Reference"
+          placeholder="Add A Reference&#10;[Max 70 Characters]"
           id="description"
           cols="30"
           rows="4"
+          maxLength={70}
           onChange={handleInput("description")}
         ></textarea>
       </div>
@@ -112,6 +120,7 @@ function Form() {
           bPad={".8rem 1.6rem"}
           bg={"#000000"}
           color={"var(--color-blue)"}
+          isDisabled={title==="" || amount<=0 || category==="" || date==="" ? true : false}
         />
       </div>
     </FormStyled>
@@ -138,6 +147,14 @@ const FormStyled = styled.form`
       font-style: italic;
     }
   }
+
+  textarea {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
   input:focus,
   textArea:focus,
   select:focus {
@@ -150,13 +167,42 @@ const FormStyled = styled.form`
     }
   }
 
-  .date-cnt > div {
+  .date-cnt {
+    width: fit-content;
     border: 1px solid var(--color-purple);
     background-color: black;
-  }
-  .date-cnt button {
-    color: whitesmoke;
-    opacity: 0.8;
+    .react-datepicker  {
+      font-family : 'Roboto Mono';
+    }
+    .react-datepicker__header  {
+      background-color: black;
+      font-size: medium;
+    }
+    .react-datepicker__day-name,.react-datepicker__current-month,.react-datepicker__day {
+      color : var(--color-yellow);
+      opacity: 0.7;
+      font-style : italic;
+    }
+    .react-datepicker {
+      border : 1px solid var(--color-purple);
+      border-top: 5px solid var(--color-purple);
+      background-color: #000000;
+      font-weight: bold;
+    }
+    .react-datepicker__day--today {
+      background-color: var(--color-purple);
+      border-radius: 50%;
+    }
+    .react-datepicker__day:hover {
+      border-radius: 50%;
+      background-color: white;
+      color : black;
+    }
+    .react-datepicker__day {
+      font-size: small;
+    }
+    
+
   }
 
   .selects {
@@ -164,7 +210,6 @@ const FormStyled = styled.form`
     justify-content: flex-end;
     select {
       font-style: italic;
-      color: var(--color-yellow);
       opacity: 1;
       option {
         color: whitesmoke;
@@ -180,6 +225,20 @@ const FormStyled = styled.form`
         color: black !important;
       }
     }
+    button:disabled{
+      opacity: 0.5;
+      &:hover {
+        background: #000000 !important;
+        color : var(--color-blue) !important;
+        cursor: not-allowed;
+      }
+    }
+
+  }
+
+  .error {
+    color : red;
   }
 `;
+
 export default Form;

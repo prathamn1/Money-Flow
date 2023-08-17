@@ -3,16 +3,20 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const loginController = async (req, res) => {
+  
   try {
+
     const user = await userSchema.findOne({ email: req.body.email });
+
     if (!user) {
       return res.send({
         success: false,
-        message: "user does not exist",
+        message: "User does not exist ! Invalid Email-Id",
       });
     }
     // check password is correct or not
-    const validPassword = bcrypt.compare(req.body.password, user.password);
+    // console.log(req.body.password,user.password);
+    const validPassword = await bcrypt.compare(req.body.password, user.password);
 
     if (!validPassword) {
       return res.send({
@@ -28,7 +32,7 @@ const loginController = async (req, res) => {
     });
     res.send({
       success: true,
-      message: "user logged in successfully",
+      message: "User logged in successfully",
       data: token,
     });
   } catch (error) {
@@ -45,7 +49,7 @@ const registerController = async (req, res) => {
     if (user) {
       return res.send({
         success: false,
-        message: "User already exist ",
+        message: "Email-Id already exists ",
       });
     }
 
@@ -55,7 +59,7 @@ const registerController = async (req, res) => {
     await newUser.save();
     res.send({
       success: true,
-      message: "user created successfully",
+      message: "User created successfully",
     });
   } catch (error) {
     res.send({

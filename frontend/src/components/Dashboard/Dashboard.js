@@ -9,7 +9,7 @@ import { toast } from "react-hot-toast";
 function Dashboard() {
   const {
     loggedInUser,
-    totalExpenses,
+    totalExpense,
     hideLoader,
     showLoader,
     incomes,
@@ -22,32 +22,30 @@ function Dashboard() {
   } = useGlobalContext();
 
   useEffect(() => {
-    // console.log(process.env.NODE_ENV)
-    const fetchData = async () => {
-      if (loggedInUser.name !== undefined) return;
 
+    const fetchData = async () => {
       showLoader();
       try {
-        const userResponse = await getCurrentUser();
-
-        if (userResponse.success) {
-          // console.log(userResponse.data);
-          await getIncomes(userResponse.data._id);
-          await getExpenses(userResponse.data._id);
+        if (loggedInUser.name !== undefined) {
+          await getIncomes(loggedInUser._id);
+          await getExpenses(loggedInUser._id);
         } else {
+          toast.error('User Authentication Error! Please Login Again')
           localStorage.removeItem("token");
-          // console.error("User authentication error:", userResponse.message);
+          window.location.href('/login')
         }
       } catch (error) {
         toast.error("Connection Error!");
-        // console.error("Error:", error.message);
       } finally {
         hideLoader();
       }
-    };
+    }
 
-    fetchData();
-  });
+    if(incomes.length===0 && expenses.length===0) fetchData();
+
+
+
+  },[]);
 
   let minIncome = Math.min(...incomes.map((item) => item.amount));
   let maxIncome = Math.max(...incomes.map((item) => item.amount));
@@ -71,14 +69,14 @@ function Dashboard() {
         <div className="expense">
           <h2>Total Expense</h2>
           <p style={{ color: "#ff0000" }}>
-            {ruppee} {totalExpenses()}
+            {ruppee} {totalExpense()}
           </p>
         </div>
         <div className="balance">
           <h2>Total Balance</h2>
           <p
             style={{
-              color: totalIncome() < totalExpenses() ? "#ff0000" : "#00ff00",
+              color: totalIncome() < totalExpense() ? "#ff0000" : "#00ff00",
             }}
           >
             {ruppee} {totalBalance()}
@@ -139,7 +137,6 @@ const DashboardStyled = styled.div`
     grid-column: 1 / 2;
 
     h2 {
-      /* font-size : 1.5rem; */
       font-size: 120%;
       color: var(--color-white);
     }
@@ -159,47 +156,40 @@ const DashboardStyled = styled.div`
 
     .income,
     .expense {
-      max-height: fit-content;
-      max-width: 240px;
+      min-height: -moz-fit-content;
+      min-width : -moz-fit-content;
+      width : 18vw;
       margin: 0 13%;
       text-align: center;
-
-      max-height: 80%;
-      h2:hover,
-      p:hover {
-        opacity: 1;
-        font-weight: 700;
-        font-size: 3vh;
-      }
+      height : 13vh;
+      
     }
 
     .income,
     .expense,
     .balance {
-      font-size: clamp(2.5vh, 2vh, 3vh);
+      font-size: clamp(15px, 1.3vw, 2vw);
       display: flex;
       flex-direction: column;
       justify-content: center;
       background-color: #000000;
       border: 0.5px solid var(--color-blue);
-      h2,
-      p {
-        font-weight: 500;
-        opacity: 0.7;
-      }
+      font-weight: 500;
+      opacity: 0.8;
     }
 
     .balance {
+      height: 15vh;
       max-height: fit-content;
       grid-column: 1/3;
       text-align: center;
+      
+    }
 
-      h2:hover,
-      p:hover {
+    .income:hover,.expense:hover,.balance:hover {
         opacity: 1;
         font-weight: 700;
-        font-size: 3.5vh;
-      }
+        font-size: max(18px,1.5vw);
     }
   }
 
@@ -217,6 +207,7 @@ const DashboardStyled = styled.div`
   }
 
   .stats-con {
+    min-height: fit-content;
     display: flex;
     justify-content: space-around;
     flex-direction: column;
@@ -234,19 +225,19 @@ const DashboardStyled = styled.div`
       display: flex;
       color: var(--color-yellow);
       justify-content: space-between;
-      font-size: 1rem;
       span {
         color: var(--color-white);
-        font-size: clamp(2.5vh, 2vh, 3vh);
+        font-size: clamp(20px, 1.5vw, 2vw);
       }
     }
     .salary-item {
+      height : 10vh;
       opacity: 0.7;
       font-weight: 400;
-      font-size: clamp(2.5vh, 2vh, 3vh);
+      font-size: clamp(15px, 1.2vw ,1.5vw);
       background: #000000;
       border: 1px solid var(--color-blue);
-      padding: clamp(3vh, 2vh, 4vh);
+      padding: clamp(1vw, 2vw, 3vw);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -255,7 +246,7 @@ const DashboardStyled = styled.div`
     .salary-item:hover {
       opacity: 1;
       font-weight: 700;
-      font-size: clamp(2.7vh, 2.2vh, 3.2vh);
+      font-size: clamp(16px, 1.4vw, 1.7vw);
     }
   }
 `;

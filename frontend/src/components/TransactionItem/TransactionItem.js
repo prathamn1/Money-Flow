@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import {styled,keyframes} from "styled-components";
 import { dateFormat } from "../../utils/DateFormat";
 import {
   bitcoin,
@@ -87,119 +87,170 @@ const TransactionItem = ({
     }
   };
 
-  // console.log('type', type)
 
   return (
     <IncomeItemStyled>
-      <div className="icon">
-        {type === "Expense" ? expenseCatIcon() : incomeCatIcon()}
-      </div>
-      <div className="content">
-        <div className="heading">
-          <div
-            className="indicator"
-            style={{
-              backgroundColor: type === "Income" ? "#00ff00" : "#ff0000",
-            }}
-          ></div>
-          <h5>{title}</h5>
+
+      
+      <div className="transaction-item-container">
+        <div className="icon">
+          {type === "Expense" ? expenseCatIcon() : incomeCatIcon()}
         </div>
-        <div className="inner-content">
-          <div className="text">
-            <p>
-              {ruppee} {amount}
-            </p>
-            <p>
-              {calender} {dateFormat(date)}
-            </p>
-            <p>
-              {comment}
-              {description}
-            </p>
+        <div className="info">
+          <div className="heading">
+            <div className="indicator"
+              style={{
+                backgroundColor: type === "Income" ? "#00ff00" : "#ff0000",
+              }}
+            >
+            </div>
+            <h5>{title}</h5>
           </div>
-          <div className="btn-con">
-            <Button
-              icon={trash}
-              bPad={"1rem"}
-              bRad={"50%"}
-              bg={"var(--primary-color"}
-              color={"#fff"}
-              iColor={"#fff"}
-              hColor={"var(--color-green)"}
-              onClick={() => deleteItem(id)}
-            />
+          <div className="content">
+            <p>{ruppee} {amount} </p>
+            <p>{calender} {dateFormat(date)} </p>
           </div>
+        </div>
+        
+        <div className="desc">
+          {comment}
+          <p> {description}</p>
+        </div>
+        <div className="btn-con">
+          <Button
+            icon={trash}
+            bPad={"clamp(0.5vw,1vw,1.5vw)"}
+            bRad={"50%"}
+            bg={"var(--primary-color"}
+            color={"#fff"}
+            iColor={"#fff"}
+            hColor={"var(--color-green)"}
+            onClick={() => deleteItem(id)}
+          />
         </div>
       </div>
     </IncomeItemStyled>
   );
 };
 
-const IncomeItemStyled = styled.div`
-  background: whitesmoke;
-  padding: 0.5rem 1rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  max-width: 95%;
 
-  color: #222260;
-  .icon {
-    width: fit-content;
-    background: #f5f5f5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    border: 2px solid #ffffff;
-
-    i {
-      font-size: 2rem;
-    }
-    i:hover {
-      font-size: 2.5rem;
-    }
+const Fade = keyframes`
+  from {
+    opacity: 0.5;
   }
+  to {
+    opacity: 1;
+  }
+`
 
-  .content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    .heading {
+const IncomeItemStyled = styled.div`
+  .transaction-item-container {
+    background: whitesmoke;
+    max-width: 95%;
+    margin :0;
+    padding : 1rem 1rem;
+    
+    display : grid;
+    grid-template-columns: 10% 40% 40% 10%;
+    grid-template-areas: 'icon info description delete';
+    color: #222260;
+    .icon {
+      grid-area : icon;
+      width: fit-content;
+      background: #f5f5f5;
       display: flex;
-      justify-content: flex-start;
-      .indicator {
-        width: 0.8rem;
-        height: 0.8rem;
-        border-radius: 50%;
-      }
-      h5 {
-        color: var(--color-purple);
-        font-size: 1.2rem;
-        padding-left: 1rem;
-        position: relative;
-        font-weight: 700;
-      }
-    }
-
-    .inner-content {
-      display: flex;
-      justify-content: space-between;
       align-items: center;
-      .text {
+      justify-content: center;
+      align-self: center;
+
+      i {
+        font-size: clamp(2vw,2vw,3vw);
+        animation: ${Fade} 2s infinite alternate linear;
+      }
+      
+    } 
+
+    .info {
+      align-self: center;
+      grid-area : info;
+      display: flex;
+      flex-direction: column;
+      row-gap: 8px;
+      .heading {
         display: flex;
-        align-items: center;
-        gap: 1.5rem;
-        p {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          color: var(--primary-color);
-          opacity: 0.8;
+        justify-content: flex-start;
+        .indicator {
+          width: 0.8rem;
+          height: 0.8rem;
+          border-radius: 50%;
+        }
+        h5 {
+          word-break: break-word;
+          color: var(--color-purple);
+          font-size: clamp(15px,1.3vw,1.5vw);
+          padding-left: 0.4rem;
+          font-weight: 700;
+          text-transform: capitalize;
+        
         }
       }
+
+      .content {
+        font-size: clamp(12px,1vw,1.5vw);
+        align-self: center;
+        display: flex;
+        flex-direction: column;
+        align-self : baseline;
+        margin-left: 5%;
+        gap : 5%;
+          p {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-color);
+            opacity: 0.8;
+          }
+      }
+    }
+
+    .desc {
+      
+      display: flex;
+      margin-left : auto 2px;
+      grid-area: description;
+      i {
+        margin-top: 6px;
+        margin-right: 2px;
+        margin-left : 6px;
+      }
+      p {
+        word-wrap: break-word;
+        width: 80%;
+        font-size: clamp(13px,1vw,1.5vw);
+        letter-spacing: -1px;
+        height : 100%;
+      }
+    }
+
+    .btn-con {
+      align-self: center;
+      justify-self: flex-end;
+      grid-area: delete;
+      i {
+        font-size: clamp(0.5vw,1vw,1.2vw);
+      }
+    
     }
   }
+
+  .transaction-item-container:hover .icon>i {
+      animation-duration: 0s;
+      font-size: clamp(2vw,2.5vw,3vw);
+  }
+  
 `;
+
+
+
 
 export default TransactionItem;

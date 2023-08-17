@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../context/GlobalContext";
 import { toast } from "react-hot-toast";
@@ -7,17 +7,23 @@ import { styled } from "styled-components";
 
 function Register() {
   const navigate = useNavigate();
-  const [user, setUser] = React.useState({
+  const [user, setUser] = useState({
     name: "",
     email: "",
     password: "",
   });
 
-  const { registerUser, setRotateLogo, rotateLogo } = useGlobalContext();
+  const { registerUser, setRotateLogo, rotateLogo, error, setError } = useGlobalContext();
 
   const register = async () => {
     // showLoader();
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if(!emailPattern.test(user.email)) {
+      setError("Invalid Email-id entered");
+      return ;
+    }
     setRotateLogo(true);
+
     try {
       const response = await registerUser(user);
 
@@ -28,16 +34,33 @@ function Register() {
         toast.error(response.message);
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error("Client Error! Check your Internet Connection");
     } finally {
       // hideLoader();
       setRotateLogo(false);
     }
   };
+
+  const buttonRef  = useRef(null)
+
+  const handleGlobalKeyPress = (event) => {
+    if (event.key === "Enter") {
+      buttonRef.current.click();
+    }
+  };
+
   useEffect(() => {
-    // console.log("inside register")
+    // console.log("inside login")
     if (localStorage.getItem("token")) navigate("/");
+    setError("");
+    document.addEventListener("keydown", handleGlobalKeyPress);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      document.removeEventListener("keydown", handleGlobalKeyPress);
+    };
   }, []);
+
 
   return (
     <RegisterPage>
@@ -67,14 +90,18 @@ function Register() {
           onChange={(e) => setUser({ ...user, name: e.target.value })}
           placeholder="Enter Your Full Name"
         />
+        {error.length!==0 && <p className="error">{error}</p>}
         <h1 className="text-xl text-primary ">Email</h1>
         <input
           className=""
-          type="text"
+          type="email"
           required
           value={user.email}
-          onChange={(e) => setUser({ ...user, email: e.target.value })}
-          placeholder="Enter Your Email"
+          onChange={ (e) => {
+            setError("");
+            setUser({ ...user, email: e.target.value })}
+          }
+          placeholder="Enter Your Email-id"
         />
         <h1 className=" text-xl text-primary ">Password</h1>
         <input
@@ -86,13 +113,15 @@ function Register() {
           placeholder="Enter Your Password"
         />
         <button
+          ref={buttonRef}
           type="button"
           className={
-            user.email && user.password
+            user.email && user.password && !error && user.name
               ? "contained-button "
               : "disabled-button"
           }
           onClick={register}
+          disabled = {user.name==="" || user.email==="" || user.password==="" ? true : false}
         >
           Proceed
         </button>
@@ -160,7 +189,13 @@ const RegisterPage = styled.div`
   .disabled-button {
     background-color: var(--color-light-black);
     color: var(--color-purple);
+    cursor: not-allowed;
   }
+
+  .error {
+    color : red;
+  }
+
 `;
 
 export default Register;

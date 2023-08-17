@@ -11,48 +11,51 @@ import Expenses from "../components/Expenses/Expenses";
 import { useGlobalContext } from "../context/GlobalContext";
 import { toast } from "react-hot-toast";
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = () => {
   const {
     showLoader,
     hideLoader,
-    loggedInUser,
     getCurrentUser,
     setLoggedInUser,
+    loggedInUser,
   } = useGlobalContext();
   const navigate = useNavigate();
+
+
   useEffect(() => {
     const getUser = async () => {
+      showLoader();
       try {
-        showLoader();
         const response = await getCurrentUser();
 
         hideLoader();
         if (response.success) {
           toast.success(response.message);
-          // console.log(response.data)
           setLoggedInUser(response.data);
-          // console.log(loggedInUser)
-          // console.log(loggedInUser)
         } else {
+          localStorage.removeItem('token');
           toast.error(response.message);
           navigate("/login");
         }
       } catch (error) {
-        hideLoader();
         toast.error(error.message);
         navigate("/login");
+      }
+      finally {
+        hideLoader();
       }
     };
 
     if (localStorage.getItem("token")) {
       getUser();
     } else {
-      console.log("line 42");
       navigate("/login");
     }
+    
   }, []);
 
   const [active, setActive] = useState(1);
+
   // const orbMemo = useMemo(() => {
   //   return <Orb />;
   // }, []);
@@ -70,6 +73,7 @@ const ProtectedRoute = ({ children }) => {
       default:
         return <Dashboard />;
     }
+    
   };
 
   return (
@@ -79,7 +83,9 @@ const ProtectedRoute = ({ children }) => {
       <MainLayout>
         <Navigation active={active} setActive={setActive} />
 
-        <main>{displayData()}</main>
+        <main>
+          {loggedInUser._id!==undefined && displayData()}
+        </main>
       </MainLayout>
     </AppStyled>
   );
@@ -91,7 +97,7 @@ const AppStyled = styled.div`
   main {
     flex: 1;
     background-color: var(--color-light-dark);
-    overflow-x: hidden;
+    overflow: hidden;
     &::-webkit-scrollbar {
       width: 0;
     }

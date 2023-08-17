@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const Button = ({ name, icon, onClick, bg, bPad, color, bRad }) => {
+const Button = ({ name, icon, onClick, bg, bPad, color, bRad,isDisabled }) => {
   return (
     <ButtonStyled
       style={{
@@ -11,6 +11,7 @@ const Button = ({ name, icon, onClick, bg, bPad, color, bRad }) => {
         color: color,
       }}
       onClick={onClick}
+      disabled={isDisabled}
     >
       {icon}
       {name}

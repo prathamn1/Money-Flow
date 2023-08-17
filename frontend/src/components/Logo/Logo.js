@@ -28,7 +28,7 @@ const LogoStyled = styled.div`
     animation: ${(props) =>
       props.rotate.rotate &&
       css`
-        ${rotateLogin} 2s infinite linear
+        ${rotateLogin} 1s infinite linear;
       `};
   }
 `;

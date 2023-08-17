@@ -11,7 +11,7 @@ import {
   ArcElement,
 } from "chart.js";
 
-import { Line, Bar } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 import styled from "styled-components";
 import { useGlobalContext } from "../../context/GlobalContext";
 import { dateFormat } from "../../utils/DateFormat";
@@ -88,8 +88,6 @@ const Chart = () => {
     },
     plugins: {
       legend: {
-        // maxHeight : 14,
-        maxWidth: 14,
         position: "top",
         labels: {
           padding: 20,
@@ -106,7 +104,6 @@ const Chart = () => {
       },
       tooltip: {
         usePointStyle: true,
-        // displayColors: true,
         backgroundColor: "#241468",
         bodyAlign: "center",
         titleAlign: "center",
@@ -136,7 +133,7 @@ const Chart = () => {
     scales: {
       y: {
         ticks: {
-          color: "rgba(250,221,146,.5)",
+          color: "rgba(250,221,146,.8)",
           font: {
             size: 10,
             family: "Roboto Mono",
@@ -148,10 +145,9 @@ const Chart = () => {
         },
       },
       x: {
-        // beginAtZero : true,
         ticks: {
           display: true,
-          color: "rgba(250,221,146,.5)",
+          color: "rgba(250,221,146,.8)",
           font: {
             size: 10,
             family: "Roboto Mono",
