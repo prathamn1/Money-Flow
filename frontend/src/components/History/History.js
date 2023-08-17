@@ -41,7 +41,7 @@ function History() {
 }
 
 const HistoryStyled = styled.div`
-  background-color: #000000;
+  
   .first-item {
     border-top: 5px solid var(--color-blue);
   }
@@ -49,44 +49,53 @@ const HistoryStyled = styled.div`
   flex-direction: column;
 
   .history-item {
-    /* margin-right: 1rem; */
-    max-width: 100%;
+    background-color: #000000;
+    height: 10vh;
+    min-height: -moz-fit-content;
+    /* min-width: 100%; */
+    width : 95%;
     border-left: 1px solid var(--color-blue);
     border-right: 1px solid var(--color-blue);
     border-bottom: 1px solid var(--color-blue);
-    /* border: 2px solid rgba(250, 227,146,.5); */
-    /* box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06); */
-    padding: 3vh;
-    /* border-radius: 20px; */
-    font-size: clamp(2.2vh, 2vh, 2.5vh);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    padding: 3vh 5px;
+    font-size: clamp(10px, 1vw, 1.5vw);
+    display: grid;
+    grid-template-columns: 30% 40% 30%;
+    grid-template-areas: 'hst-tit hst-dte hst-amt';
+    text-align: center;
+    align-content: center;
+    opacity: 0.8;
     .history-title {
+      text-transform: capitalize;
+      word-wrap: break-word;
+      grid-area: hst-tit;
       color: rgb(250, 227, 146);
-      opacity: 0.8;
+      
     }
     .history-amount {
-      opacity: 0.8;
+      grid-area: hst-amt;
+      
     }
     .history-date {
+      grid-area: hst-dte;
       color: rgb(250, 227, 146);
-      opacity: 0.7;
+     
     }
   }
-  .history-item :hover {
-    font-size: 120%;
+  .history-item:hover {
+    font-size: 1.4vw;
     font-weight: 500;
     opacity: 1;
   }
 
   .items-container {
+    overflow-x : hidden;
     overflow-y: scroll;
     max-height: 45vh;
   }
 
   .items-container::-webkit-scrollbar {
-    width: 0.5rem;
+    width: 1rem;
   }
   .items-container::-webkit-scrollbar-track {
     background-color: black;

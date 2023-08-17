@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import styled from "styled-components";
+import React, { useEffect,useRef } from "react";
+import {styled} from "styled-components";
 import { useGlobalContext } from "../../context/GlobalContext";
 import Form from "../Form/IncomeForm";
 import TransactionItem from "../TransactionItem/TransactionItem";
@@ -18,6 +18,9 @@ function Income() {
   } = useGlobalContext();
 
   useEffect(() => {
+
+    if(loggedInUser._id!==undefined) return;
+
     showLoader();
     try {
       if (loggedInUser._id === undefined) {
@@ -29,7 +32,8 @@ function Income() {
     } finally {
       hideLoader();
     }
-  });
+  },[]);
+
 
   return (
     <IncomeStyled>
@@ -88,9 +92,11 @@ const IncomeStyled = styled.div`
       color: var(--color-white);
     }
     .total-income {
-      width: max-content;
+      width: 25vw;
+      min-width: fit-content;
+      height: 10vh;
+      min-height: fit-content;
       opacity: 0.8;
-      /* font-size : 20px; */
       font-size: clamp(2vh, 2.5vh, 3vh);
       display: flex;
       justify-content: center;
@@ -107,7 +113,7 @@ const IncomeStyled = styled.div`
       }
     }
     .total-income:hover {
-      font-size: clamp(2.5vh, 3.2vh, 3.5vh);
+      font-size: clamp(1.2vw, 1.5vw, 2vw);
       opacity: 1;
       font-weight: 700;
     }
@@ -116,6 +122,7 @@ const IncomeStyled = styled.div`
   .income-content {
     display: grid;
     max-height: 100%;
+    grid-template-columns: 40% 55%;
     grid-template-areas:
       "frm trs"
       "frm trs";
@@ -131,10 +138,12 @@ const IncomeStyled = styled.div`
       flex-direction: column;
       max-height: 70vh;
       overflow-y: scroll;
+      overflow-x : hidden;
       grid-area: trs;
       scroll-behavior: smooth;
       gap: 0.7rem;
     }
+
     .incomes::-webkit-scrollbar {
       width: 1rem;
     }
@@ -148,5 +157,6 @@ const IncomeStyled = styled.div`
     }
   }
 `;
+
 
 export default Income;

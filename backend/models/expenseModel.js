@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
 const expenseSchema = new mongoose.Schema(
   {
     userId: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,  // Reference to the User's _id field
+      ref: "User",
       required: true,
     },
     title: {

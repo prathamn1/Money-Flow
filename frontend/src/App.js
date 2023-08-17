@@ -7,6 +7,7 @@ import ProtectedRoute from "./pages/ProtectedRoute";
 import { useGlobalContext } from "./context/GlobalContext";
 // import {Dna} from 'react-loader-spinner'
 import Loader from "./utils/Loader";
+import './index.css'
 // import Homepage from './pages/HomePage'
 
 const App = () => {
@@ -15,7 +16,9 @@ const App = () => {
   return (
     <>
       {isLoading && <Loader />}
-      <Toaster position="top-center" reverseOrder={false} />
+      <div className="toast">
+        <Toaster position="top-center" reverseOrder={false} />
+      </div>
 
       <BrowserRouter>
         <Routes>

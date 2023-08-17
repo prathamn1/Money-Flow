@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../context/GlobalContext";
 import Logo from "../components/Logo/Logo";
@@ -7,18 +7,26 @@ import { styled } from "styled-components";
 
 function Login() {
   const navigate = useNavigate();
-  const [user, setUser] = React.useState({
+
+  const [user, setUser] = useState({
     email: "",
     password: "",
   });
 
-  const { loginUser, rotateLogo, setRotateLogo } = useGlobalContext();
+  const { loginUser, rotateLogo, setRotateLogo, error, setError } =
+    useGlobalContext();
 
   const login = async () => {
     // showLoader()
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(user.email)) {
+      setError("Invalid Email-id entered");
+      return;
+    }
     setRotateLogo(true);
     try {
       const response = await loginUser(user);
+      // console.log(response);
       if (response.success) {
         toast.success(response.message);
         localStorage.setItem("token", response.data);
@@ -27,16 +35,31 @@ function Login() {
         toast.error(response.message);
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error("Client Error! Check your Internet Connection");
     } finally {
       // hideLoader();
       setRotateLogo(false);
     }
   };
 
+  const buttonRef  = useRef(null)
+
+  const handleGlobalKeyPress = (event) => {
+    if (event.key === "Enter") {
+      buttonRef.current.click();
+    }
+  };
+
   useEffect(() => {
     // console.log("inside login")
+    setError("");
     if (localStorage.getItem("token")) navigate("/");
+    document.addEventListener("keydown", handleGlobalKeyPress);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      document.removeEventListener("keydown", handleGlobalKeyPress);
+    };
   }, []);
 
   return (
@@ -58,13 +81,17 @@ function Login() {
           </h1>
         </div>
         <h1 className="text-xl text-primary ">Email</h1>
+        {error && <p className="error">{error}</p>}
         <input
           className=""
-          type="text"
+          type="email"
           required
           value={user.email}
-          onChange={(e) => setUser({ ...user, email: e.target.value })}
-          placeholder="Enter Your Email"
+          onChange={(e) => {
+            setError(null);
+            setUser({ ...user, email: e.target.value });
+          }}
+          placeholder="Enter Your Email-id"
         />
         <h1 className=" text-xl text-primary ">Password</h1>
         <input
@@ -76,13 +103,16 @@ function Login() {
           placeholder="Enter Your Password"
         />
         <button
+          ref={buttonRef}
           type="button"
           className={
             user.email && user.password
               ? "contained-button "
               : "disabled-button"
           }
+          onKeyDown={(e)=>console.log(e)}
           onClick={login}
+          disabled={user.email === "" || user.password === "" ? true : false}
         >
           Proceed
         </button>
@@ -151,11 +181,20 @@ const LoginPage = styled.div`
   .disabled-button {
     background-color: var(--color-light-black);
     color: var(--color-purple);
+    cursor: not-allowed;
   }
 
   ::placeholder {
     font-style: italic;
   }
+
+  .error {
+    color: red;
+  }
+
+  overflow: visible;
+
+
 `;
 
 export default Login;

@@ -16,16 +16,24 @@ export const GlobalProvider = ({ children }) => {
   const [expenses, setExpenses] = useState([]);
   const [error, setError] = useState(null);
 
-  //calculate incomes
+
   const addIncome = async (income) => {
+    showLoader();
     try {
       income.userId = loggedInUser;
-      await axios.post(`${BASE_URL}add-income`, income).catch((err) => {
-        setError(err.response.data.message);
-      });
+      await axios.post(`${BASE_URL}add-income`, income);
       getIncomes(loggedInUser._id);
+      toast.success("Income Added Successfully", 
+        {
+          position : 'bottom-right',
+          style : {
+            color: 'green'
+          }
+        });
     } catch {
       toast.error("Couldn't add Income");
+    }finally {
+      hideLoader();
     }
   };
 
@@ -39,11 +47,22 @@ export const GlobalProvider = ({ children }) => {
   };
 
   const deleteIncome = async (id) => {
+    showLoader();
     try {
       await axios.delete(`${BASE_URL}delete-income/${id}`);
       getIncomes(loggedInUser._id);
+      toast.success("Income Added Successfully", 
+        {
+          position : 'bottom-right',
+          style : {
+            color: 'green'
+          }
+        });
     } catch {
       toast.error("Connection Error! Couldn't Delete Income");
+    }
+    finally {
+      hideLoader();
     }
   };
 
@@ -52,20 +71,28 @@ export const GlobalProvider = ({ children }) => {
     incomes.forEach((income) => {
       totalIncome = totalIncome + income.amount;
     });
-
     return totalIncome;
   };
 
-  //calculate incomes
+
   const addExpense = async (expense) => {
+    showLoader();
     try {
       expense.userId = loggedInUser;
-      await axios.post(`${BASE_URL}add-income`, expense).catch((err) => {
-        setError(err.response.data.message);
-      });
-      getIncomes(loggedInUser._id);
+      await axios.post(`${BASE_URL}add-expense`, expense);
+      getExpenses(loggedInUser._id);
+      toast.success("Expense Added Successfully", 
+        {
+          position : 'bottom-right',
+          style : {
+            color: 'red'
+          }
+        });
     } catch {
       toast.error("Connection Error! Couldn't add Expense");
+    }
+    finally {
+      hideLoader();
     }
   };
 
@@ -79,25 +106,36 @@ export const GlobalProvider = ({ children }) => {
   };
 
   const deleteExpense = async (id) => {
+    showLoader();
     try {
       await axios.delete(`${BASE_URL}delete-expense/${id}`);
       getExpenses(loggedInUser._id);
+      toast.success("Expense Deleted Successfully", 
+        {
+          position : 'bottom-right',
+          style : {
+            color : 'red'
+          }
+        }
+      )
     } catch {
       toast.error("Connection Error! Couldn't delete Expense");
     }
+    finally {
+      hideLoader();
+    }
   };
 
-  const totalExpenses = () => {
-    let totalIncome = 0;
-    expenses.forEach((income) => {
-      totalIncome = totalIncome + income.amount;
+  const totalExpense = () => {
+    let totalExpense = 0;
+    expenses.forEach((exp) => {
+      totalExpense = totalExpense + exp.amount;
     });
-
-    return totalIncome;
+    return totalExpense;
   };
 
   const totalBalance = () => {
-    return totalIncome() - totalExpenses();
+    return totalIncome() - totalExpense();
   };
 
   const transactionHistory = () => {
@@ -110,7 +148,11 @@ export const GlobalProvider = ({ children }) => {
 
   ////////////////////////////////////////////////////////////
 
+  
+
+
   const loginUser = async (user) => {
+    
     try {
       const response = await axios.post(`${BASE_URL}login`, user);
       return response.data;
@@ -136,10 +178,8 @@ export const GlobalProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      // console.log(response.data)
       return response.data;
     } catch (error) {
-      // console.log("catch GetCurrentUser()")
       return error.response.data;
     }
   };
@@ -178,7 +218,7 @@ export const GlobalProvider = ({ children }) => {
         addExpense,
         getExpenses,
         deleteExpense,
-        totalExpenses,
+        totalExpense,
         totalBalance,
         transactionHistory,
         error,

@@ -1,5 +1,5 @@
 import React from "react";
-import { styled } from "styled-components";
+import { styled, keyframes } from "styled-components";
 import { MenuItems } from "../../utils/MenuItems";
 import { useGlobalContext } from "../../context/GlobalContext";
 import { signout, copyright } from "../../utils/Icons";
@@ -50,18 +50,23 @@ const Navigation = ({ active, setActive }) => {
   );
 };
 
+
+const rotateLogo = keyframes`
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(359deg);
+    }
+`;
+
 const NavStyled = styled.div`
   resize: both;
   .sidebar {
     font-family: "Roboto Mono", monospace;
-
     max-width: 374px;
     height: 100%;
-    /* background: rgba(252, 246, 249, 0.78); */
     background-color: #000000;
-    /* border: 3px solid #ffffff; */
-    /* backdrop-filter: blur(4.5px); */
-    /* border-radius: 32px; */
     border-right: 5px solid #068fff;
     display: flex;
     flex-direction: column;
@@ -80,11 +85,22 @@ const NavStyled = styled.div`
         background-color: #000000;
         box-shadow: 0px 1px 17px rgba(0, 0, 0, 0.06);
       }
+
       h2 {
+        text-transform: capitalize;
         letter-spacing: 0.1rem;
         font-size: large;
         font-weight: 700;
         color: #068fff;
+      }
+    }
+
+    .user-container:hover {
+      img {
+        animation: ${rotateLogo} 1s infinite linear;
+      }
+      h2 {
+        color : #ffffff;
       }
     }
 
@@ -102,7 +118,6 @@ const NavStyled = styled.div`
         font-weight: 700;
         cursor: pointer;
         transition: all 0.4s ease-in-out;
-        /* color: rgba(34, 34, 96, 0.6); */
         color: #4e4feb;
         padding-left: 1rem;
         position: relative;
@@ -111,12 +126,38 @@ const NavStyled = styled.div`
           font-size: 1.4rem;
           transition: all 0.4s ease-in-out;
         }
+        span {
+          width: fit-content;
+          position: relative;
+          transition: color 0.25s ease-out;
+        }
+
+        span:hover {
+          color: white;
+        }
+
+        span::after {
+          content: "";
+          position: absolute;
+          width: 100%;
+          transform: scaleX(0);
+          height: 3px;
+          bottom: -5px;       //to create a padding between line and element
+          left: 0;
+          background-color: #ffffff;
+          transform-origin: bottom right;
+          transition: transform 0.25s ease-out;
+        }
+
+        span:hover::after {
+          transform: scaleX(1);
+          transform-origin: bottom left;
+        }
       }
     }
 
     .active {
       color: #068fff !important;
-
       i {
         color: #068fff !important;
       }
